@@ -1,0 +1,83 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rate Speech!</title>
+    <meta name="description" content="Disqus + Perspecitve, made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <header>
+      <h1>
+        Rate Speech
+      </h1>
+    </header>
+
+    <main>
+      <section id="main">
+        <h3>Oh hi, leave a comment below to test out <a href="https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md">Perspective</a>'s
+          <select name="model" id="modelSelect">
+            <option value="TOXICITY">TOXICITY</option>
+            <option value="ATTACK_ON_AUTHOR">ATTACK_ON_AUTHOR</option>
+            <option value="ATTACK_ON_COMMENTER">ATTACK_ON_COMMENTER</option>
+            <option value="INCOHERENT">INCOHERENT</option>
+            <option value="INFLAMMATORY">INFLAMMATORY</option>
+            <option value="OBSCENE">OBSCENE</option>
+            <option value="OFF_TOPIC">OFF_TOPIC</option>
+            <option value="UNSUBSTANTIAL">UNSUBSTANTIAL</option>
+            <option value="LIKELY_TO_REJECT">LIKELY_TO_REJECT</option>
+          </select> model.
+        </h3>
+        <section id="current"></section>
+        <div id="disqus_thread"></div>
+      </section>
+    </main>
+    <section id="sidebar">
+      <p>recent ratings to ponder:</p>
+      <ul id="analysis">
+      </ul>
+    </section>
+
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+    <script src="/client.js"></script>
+    <script>
+      var currentModel = "TOXICITY"
+      $( "#modelSelect" ).change(function() {
+        currentModel = $(this).val()
+      });
+      
+        var disqus_config = function () {
+          this.page.identifier = "rate-speech-0";  
+          this.page.url = "https://rate-speech.glitch.me/";
+          this.callbacks.onNewComment = [function(comment) {
+                logPerspective(comment.id, comment.text, currentModel);
+          }];
+        };
+      
+        (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+            var d = document, s = d.createElement('script');
+
+            s.src = '//kaffepausen.disqus.com/embed.js';  // IMPORTANT: Replace EXAMPLE with your forum shortname!
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </body>
+</html>
